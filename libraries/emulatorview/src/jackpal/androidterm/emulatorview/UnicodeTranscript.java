@@ -484,9 +484,6 @@ class UnicodeTranscript {
      *
      * Known issues:
      * - Proper support for East Asian wide characters requires API >= 8.
-     * - Results are incorrect for individual Hangul jamo (a syllable block
-     *   of jamo should be one unit with width 2).  This does not affect
-     *   precomposed Hangul syllables.
      * - Assigning all East Asian "ambiguous" characters a width of 1 may not
      *   be correct if Android renders those characters as wide in East Asian
      *   context (as the Unicode standard permits).
@@ -514,6 +511,13 @@ class UnicodeTranscript {
             return 0;
         }
 
+        if ((codePoint >= 0x1160 && codePoint <= 0x11FF) ||
+            (codePoint >= 0xD7B0 && codePoint <= 0xD7FF)) {
+            /* Treat Hangul jamo medial vowels and final consonants as
+               combining characters with width 0 to make jamo composition
+               work correctly */
+            return 0;
+        }
         if (Character.charCount(codePoint) == 1) {
             // Android's getEastAsianWidth() only works for BMP characters
             switch (AndroidCharacterCompat.getEastAsianWidth((char) codePoint)) {
