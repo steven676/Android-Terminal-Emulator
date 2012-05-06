@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# aapt -- wrapper script
+
+CUSTOM_PACKAGE=jackpal.androidterm
+
+TOOLS=`dirname "$0"`
+
+get_property() {
+        egrep "^$1=" "$2" | cut -d= -f2
+}
+
+SDK_DIR=`get_property 'sdk\.dir' "$TOOLS/../local.properties"`
+AAPT="$SDK_DIR/platform-tools/aapt"
+
+if [ x"$1" = x"package" ]; then
+	shift
+	exec "$AAPT" package --custom-package "$CUSTOM_PACKAGE" "$@"
+else
+	exec "$AAPT" "$@"
+fi
