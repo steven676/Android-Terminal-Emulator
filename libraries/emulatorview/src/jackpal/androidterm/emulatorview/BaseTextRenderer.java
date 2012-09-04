@@ -42,7 +42,7 @@ abstract class BaseTextRenderer implements TextRenderer {
             0xff00cdcd,  // dim cyan
             0xffe5e5e5,  // dim white
             // second 8 are bright
-            0xff7f7f7f,  // medium grey
+            0xff6c6c6c,  // bright black/dark gray
             0xffff0000,  // bright red
             0xff00ff00,  // bright green
             0xffffff00,  // bright yellow
