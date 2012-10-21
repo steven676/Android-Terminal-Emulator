@@ -18,11 +18,13 @@ package jackpal.androidterm;
 
 import java.util.UUID;
 
+import android.Manifest.permission;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -44,6 +46,14 @@ public class RemoteInterface extends Activity {
     private static final String EXTRA_INITIAL_COMMAND = "jackpal.androidterm.iInitialCommand";
 
     static final String PRIVEXTRA_TARGET_WINDOW = "jackpal.androidterm.private.target_window";
+
+    /* Permissions we require from a caller attempting to use RUN_SCRIPT
+     * This list should ALWAYS include any permissions we have which can be
+     * used by shell processes! */
+    private static final String[] RUN_SCRIPT_PERMS = {
+        permission.INTERNET,
+        permission.WRITE_EXTERNAL_STORAGE
+    };
 
     private TermSettings mSettings;
 
@@ -83,7 +93,13 @@ public class RemoteInterface extends Activity {
         }
 
         Intent myIntent = getIntent();
+        boolean runScript = false;
         if (myIntent.getAction().equals(ACTION_RUN_SCRIPT)) {
+            // Check whether or not caller has permission to run this script
+            runScript = mayCallerRunScript();
+        }
+
+        if (runScript) {
             /* Someone with the appropriate permissions has asked us to
                run a script */
             String handle = myIntent.getStringExtra(EXTRA_WINDOW_HANDLE);
@@ -166,5 +182,15 @@ public class RemoteInterface extends Activity {
         startActivity(intent);
 
         return handle;
+    }
+
+    private boolean mayCallerRunScript() {
+        for (String perm : RUN_SCRIPT_PERMS) {
+            if (checkCallingPermission(perm) !=
+                    PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
     }
 }

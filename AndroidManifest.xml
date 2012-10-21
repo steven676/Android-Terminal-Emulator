@@ -9,11 +9,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_LOGS" />
-    <permission android:name="jackpal.androidterm.permission.RUN_SCRIPT"
-                android:label="@string/perm_run_script"
-                android:description="@string/permdesc_run_script"
-                android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
-                android:protectionLevel="dangerous" />
     <permission android:name="jackpal.androidterm.permission.APPEND_TO_PATH"
                 android:label="@string/perm_append_to_path"
                 android:description="@string/permdesc_append_to_path"
@@ -56,8 +51,7 @@
             </intent-filter>
         </activity>
         <activity-alias android:name="jackpal.androidterm.RunScript"
-                android:targetActivity="jackpal.androidterm.RemoteInterface"
-                android:permission="jackpal.androidterm.permission.RUN_SCRIPT">
+                android:targetActivity="jackpal.androidterm.RemoteInterface">
             <intent-filter>
                 <action android:name="jackpal.androidterm.RUN_SCRIPT" />
                 <category android:name="android.intent.category.DEFAULT" />
