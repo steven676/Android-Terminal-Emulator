@@ -29,7 +29,6 @@ import jackpal.androidterm.emulatorview.compat.KeycodeConstants;
 import jackpal.androidterm.util.SessionList;
 import jackpal.androidterm.util.TermSettings;
 
-import java.text.Collator;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -394,8 +393,7 @@ public class Term extends Activity implements UpdateCallback {
 
         String[] keys = new String[extras.size()];
         keys = extras.keySet().toArray(keys);
-        Collator collator = Collator.getInstance(Locale.US);
-        Arrays.sort(keys, collator);
+        Arrays.sort(keys);
 
         StringBuilder path = new StringBuilder();
         for (String key : keys) {
