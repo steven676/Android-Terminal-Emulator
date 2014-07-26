@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# aapt -- wrapper script
+
+CUSTOM_PACKAGE=net.steven676.android.terminal
+
+TOOLS=`dirname "$0"`
+
+get_property() {
+        egrep "^$1=" "$2" | cut -d= -f2
+}
+
+SDK_DIR=`get_property 'sdk\.dir' "$TOOLS/../local.properties"`
+# XXX HACK
+for i in "$SDK_DIR"/build-tools/*/aapt; do
+	AAPT="$i"
+done
+
+if [ x"$1" = x"package" ]; then
+	shift
+	exec "$AAPT" package --rename-manifest-package "$CUSTOM_PACKAGE" "$@"
+else
+	exec "$AAPT" "$@"
+fi
